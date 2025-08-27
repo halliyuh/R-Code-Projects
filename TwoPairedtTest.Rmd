@@ -1,0 +1,117 @@
+---
+title: "Two Sample Paired t Test - Diameter Measurements from Two Caliper Types"
+author: "Halliah Espinas"
+date: ""
+output:
+  pdf_document:
+    latex_engine: xelatex
+geometry: a4paper, margin=0.5in
+---
+
+##### **Source:** Montgomery, D. C. (2013). *Design and analysis of experiments* (8th ed.). Wiley.
+
+### Diameter Measurements from Two Caliper Types
+
+The diameter of a ball bearing was measured by 12 inspectors, each using two different kinds of calipers. The results were
+
+| Instructor | Caliper1 | Caliper 2 |
+|------------|----------|-----------|
+| 1          | 0.265    | 0.264     |
+| 2          | 0.265    | 0.265     |
+| 3          | 0.266    | 0.264     |
+| 4          | 0.267    | 0.266     |
+| 5          | 0.267    | 0.267     |
+| 6          | 0.265    | 0.268     |
+| 7          | 0.267    | 0.264     |
+| 8          | 0.267    | 0.265     |
+| 9          | 0.265    | 0.265     |
+| 10         | 0.268    | 0.267     |
+| 11         | 0.268    | 0.268     |
+| 12         | 0.265    | 0.269     |
+
+-   Is there a significant difference between the means of the population of measurements from which the two samples were selected? Use $\alpha=0.05$.
+
+-   Find the $p$-value for the test.
+
+-   Construct a 95 percent confidence interval on the difference in mean diameter measurements for the two types of calipers.
+
+### R Code
+
+```{r, include=TRUE, warning=FALSE, message=FALSE, results='hide', fig.show = 'hide'}
+# Data
+Caliper1 <- c(0.265, 0.265, 0.266, 0.267, 0.267, 0.265, 0.267, 0.267, 0.265, 0.2638, 0.268, 0.265)
+Caliper2 <- c(0.264, 0.265, 0.264, 0.266, 0.267, 0.268, 0.264, 0.265, 0.265, 0.267, 0.268, 0.269)
+
+# Normality Test
+Differences <- Caliper1 - Caliper2
+boxplot(Differences,
+        main = "Distribution of Differences Between Caliper1 and Caliper2",
+        ylab = "Difference in Diameter Measurements (units)",
+        col = "lightblue")
+shapiro.test(Differences)
+
+# Test for Equality of Mean
+t.test(Caliper1, Caliper2, paired = TRUE) 
+```
+
+#### Normality Check
+
+![](02DM.png){width="395"}
+
+As seen from the boxplot of the differences in diameter measurements between Caliper 1 and Caliper 2, the distribution appears roughly symmetric. Although the median is slightly above the center, indicating a mild left skew, the deviation is minimal. These observations suggest that the normality assumption is reasonably met. To further validate these observations, we apply the Shapiro-Wilk test.
+
+-   **Hypotheses**
+
+    -   $H_0:$ The data follows a normal distribution.
+
+    -   $H_a:$ The data does not follow a normal distribution. 
+
+-   **Level of Significance:** $\alpha=0.05$
+
+-   **Test Statistic**
+
+    |            Data             | W statistic | $p$-value |
+    |:---------------------------:|:-----------:|:---------:|
+    | Differences in Measurements |   0.90163   |  0.1665   |
+
+<!-- -->
+
+-   **Decision Rule:** Reject $H_0$ if $p < \alpha=0.05$
+
+    -   Since $p = 0.1665 > \alpha = 0.05$, we fail to reject $H_0$.
+
+-   **Interpretation/Conclusion**
+
+    -   At the 95% confidence level, there is sufficient statistical evidence to conclude that the data is normally distributed and is suitable for **Paired T-Test**.
+
+#### (a) Test for Equality of Means
+
+-   **Hypotheses**
+
+    -   $H_0:$ There is no significant difference in the mean caliper diameter measurements.
+
+    -   $H_a:$ There is a significant difference in the mean caliper diameter measurements.
+
+-   **Level of Significance:** $\alpha=0.05$
+
+-   **Test Statistic**
+
+| t statistic | DF  | $p$-value |
+|:-----------:|:---:|:---------:|
+|  -0.15617   | 11  |  0.8787   |
+
+-   **Decision Rule:** Reject $H_0$ if $p < \alpha=0.05$
+
+    -   Since $p = 0.8787 > \alpha = 0.05$, we fail to reject $H_0$.
+
+-   **Interpretation/Conclusion**
+
+    -   At the 95% confidence level, there is sufficient statistical evidence to conclude that there is no significant difference in the mean caliper diameter measurements.
+
+#### (b) $p$ - VALUE
+
+-   From the Paired t-Test table above, we get a $p$-value of 0.8787.
+
+#### (c) 95% Confidence Interval
+
+-   A 95% confidence interval on the difference in mean diameter measurements for the two types of calipers is [-0.001509318, 0.001309318].
