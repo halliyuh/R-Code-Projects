@@ -1,0 +1,81 @@
+---
+title: "One Sample t Test - Electronic Instrument Repair Time"
+author: "Halliah Espinas"
+date: ""
+output:
+  pdf_document:
+    latex_engine: xelatex
+geometry: a4paper, margin=0.5in
+---
+
+##### **Source:** Montgomery, D. C. (2013). *Design and analysis of experiments* (8th ed.). Wiley.
+
+### Electronic Instrument Repair Time
+
+The time to repair an electronic instrument is a normally distributed random variable measured in hours. The repair times for 16 such instruments chosen at random are as follows:
+
+**In** **Hours**
+
+|     |     |     |     |
+|-----|-----|-----|-----|
+| 159 | 280 | 101 | 212 |
+| 224 | 379 | 179 | 264 |
+| 222 | 362 | 168 | 250 |
+| 149 | 260 | 485 | 170 |
+
+-   You wish to know if the mean repair time exceeds 225 hours. Set up appropriate hypotheses for investigating this issue.
+
+-   Test the hypotheses you formulated. Use $\alpha=0.05$.
+
+-   Find the $p$-value for the test.
+
+-   Construct a 95 percent confidence interval on mean repair time.
+
+-   Can repair time, in your opinion, be adequately modeled by a normal distribution?
+
+### R Code
+
+```{r, include=TRUE, warning=FALSE, message=FALSE, results='hide', fig.show = 'hide'}
+# Data
+Hours <- c(159, 280, 101, 212, 224, 379, 179, 264, 222, 362, 168, 250, 149, 260, 485, 170)
+Meanhours <- 225
+
+# Test for Equality of Mean
+t.test(Hours, mu = Meanhours) 
+```
+
+#### (a) Hypotheses
+
+-   $H_0:$ The mean repair time of the instrument is equal to 225 hours.
+
+-   $H_a:$ The mean repair time of the instrument exceeds 225 hours.
+
+#### (b) Test for Equality of Mean
+
+-   **Level of Significance:** $\alpha=0.05$
+
+-   **Test Statistic**
+
+    | t statistic | DF  | $p$**-value** |
+    |:-----------:|:---:|:-------------:|
+    |   0.66852   | 15  |     0.514     |
+
+-   **Decision Rule:** Reject $H_0$ if $p < \alpha=0.05$
+
+    -   Since $p = 0.514 > \alpha = 0.05$, we fail to reject $H_0$.
+
+-   **Interpretation/Conclusion**
+
+    -   At the 95% confidence level, there is sufficient statistical evidence to conclude that the mean repair time of the electronic instrument does not exceed 225 hours.
+
+#### (c) $p$ - VALUE
+
+-   From the One sample t-Test table above, we get a $p$-value of 0.514.
+
+#### (d) 95% Confidence Interval
+
+-   A 95% confidence interval on the mean repair time of the electronic instrument is [188.8927, 294.1073].
+
+#### (e) Repair time modeled by a Normal Distribution
+
+-   Repair time can be modeled by a normal distribution if the data is approximately normally distributed, as assumed in the given problem. However, in practice, repair times are often positively skewed, which means that other distributions such as the log-normal or gamma distributions may be more appropriate. To determine whether the normal distribution is a suitable model for repair time, it is best to conduct a normality test before deciding.
