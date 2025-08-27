@@ -1,0 +1,134 @@
+---
+title: "Two Sample Unpaired t Test - Burning Times of Two Chemical Flare Formulations"
+author: "Halliah Espinas"
+date: ""
+output:
+  pdf_document:
+    latex_engine: xelatex
+geometry: a4paper, margin=0.5in
+---
+
+##### **Source:** Montgomery, D. C. (2013). *Design and analysis of experiments* (8th ed.). Wiley.
+
+### Burning Times of Two Chemical Flare Formulations
+
+The following are the burning times (in minutes) of chemical flares of two different formulations. The design engineers are interested in both the mean and variance of the burning times.
+
+| Type 1 | Type 2 |
+|--------|--------|
+| 65     | 64     |
+| 81     | 71     |
+| 57     | 83     |
+| 66     | 59     |
+| 82     | 65     |
+| 82     | 56     |
+| 67     | 69     |
+| 59     | 74     |
+| 75     | 82     |
+| 70     | 79     |
+
+-   Test the hypothesis that the two variances are equal. Use $\alpha=0.05$.
+
+-   Using the results, test the hypothesis that the mean burning times are equal. Use $\alpha=0.05$. What is the $p$-value for this test?
+
+-   Discuss the role of the normality assumption in this problem. Check the assumption of normality for both types of flares.
+
+### R Code
+
+```{r, include=TRUE, warning=FALSE, message=FALSE, results='hide', fig.show = 'hide'}
+# Data
+Type1 <- c(65, 82, 81, 67, 57, 59, 66, 75, 82, 70)
+Type2 <- c(64, 56, 71, 69, 83, 74, 59, 82, 65, 79)
+
+# Normality Check
+boxplot(Type1, Type2,
+        names = c("Type1", "Type2"),
+        main = "Distribution of Burning Times for Two Chemical Flare Types",
+        ylab = "Burning Time (minutes)",
+        col = c("lightblue", "lightyellow"))
+shapiro.test(Type1)
+shapiro.test(Type2)
+
+# Test for Equality of Variance
+var.test(Type1, Type2)
+
+# Test for Equality of Mean
+t.test(Type1, Type2, var.equal = TRUE) 
+```
+
+#### (a) Test for Equality of Variance
+
+-   **Hypotheses**
+
+    -   $H_0:$ All variances are equal. 
+
+    -   $H_a:$ At least one variance is different. 
+
+-   **Level of Significance:** $\alpha=0.05$
+
+-   **Test Statistic**
+
+    | F statistic |           DF           | $p$-value |
+    |:-----------:|:----------------------:|:---------:|
+    |   0.97822   | $df_1$ = 9, $df_2$ = 9 |  0.9744   |
+
+-   **Decision Rule:** Reject $H_0$ if $p < \alpha=0.05$
+
+    -   Since $p = 0.9744 > \alpha = 0.05$, we fail to reject $H_0$.
+
+-   **Interpretation/Conclusion**
+
+    -   At the 95% confidence level, there is sufficient statistical evidence to conclude that the variances between the two formulations are equal.
+
+#### (b) Test for Equality of Mean
+
+-   **Hypotheses**
+
+    -   $H_0:$ There is no significant difference in the mean burning times.
+
+    -   $H_a:$ There is a significant difference in the mean burning times. 
+
+-   **Level of Significance:** $\alpha=0.05$
+
+-   **Test Statistic**
+
+    | t statistic | DF  | $p$-value |
+    |:-----------:|:---:|:---------:|
+    |  0.048008   | 18  |  0.9622   |
+
+-   **Decision Rule:** Reject $H_0$ if $p < \alpha=0.05$
+
+    -   Since $p = 0.9622 > \alpha = 0.05$, we fail to reject $H_0$.
+
+-   **Interpretation/Conclusion**
+
+    -   At the 95% confidence level, there is sufficient statistical evidence to conclude that there is no significant difference in the mean burning times of the two chemical flare formulations.
+
+#### (c) Normality Check
+
+![](01BT-01.png){width="395"}
+
+As seen from the boxplots of the two formulations, neither shows a perfectly symmetric distribution. For Type 1, the distribution is slightly right-skewed, and the median line is not centered. For Type 2, it is also slightly right-skewed, although the whiskers are fairly balanced. These observations suggest that the normality assumption is reasonably met for both types. To further validate these observations, we apply the Shapiro-Wilk test.
+
+-   **Hypotheses**
+
+    -   $H_0:$ The data follows a normal distribution.
+
+    -   $H_a:$ The data does not follow a normal distribution. 
+
+-   **Level of Significance:** $\alpha=0.05$
+
+-   **Test Statistic**
+
+|  Data  | W statistic | $p$-value |
+|:------:|:-----------:|:---------:|
+| Type 1 |   0.91359   |  0.3065   |
+| Type 2 |   0.95478   |  0.7251   |
+
+-   **Decision Rule:** Reject $H_0$ if $p < \alpha=0.05$
+
+    -   Since for both types, $p = 0.3065 > \alpha = 0.05$ and $p = 0.7251 > \alpha = 0.05$, respectively, we fail to reject $H_0$.
+
+-   **Discussion**
+
+    -   **F-Test** and **Two-Sample t-test** both assume that the samples come from normally distributed populations. If this assumption is violated, the tests may give inaccurate results, especially with small sample sizes. Since both $p$-values are greater than 0.05, then we have sufficient statistical evidence to conclude that both types of chemical flares are normally distributed and are suitable for the two tests they undergone.
